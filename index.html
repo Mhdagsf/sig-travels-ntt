@@ -1,437 +1,481 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="css/leaflet.css">
-        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
-        <link rel="stylesheet" href="css/qgis2web.css">
-        <link rel="stylesheet" href="css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="css/leaflet-search.css">
-        <link rel="stylesheet" href="css/filter.css">
-<link rel="stylesheet" href="css/nouislider.min.css">
-        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
-        <link rel="stylesheet" href="css/leaflet-measure.css">
-        <style>
-        #map {
-            width: 676px;
-            height: 522px;
-        }
-        </style>
-        <title></title>
-    </head>
-    <body>
-        <div id="map">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="icon" type="image/x-icon" href="./dist/assets/favicon.ico" />
+  <!-- Bootstrap icons-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"
+    type="text/css" />
+  <!-- Google fonts-->
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet"
+    type="text/css" />
+  <!-- Core theme CSS (includes Bootstrap)-->
+  <link href="./dist/css/styles.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./resources/ol.css">
+  <link rel="stylesheet" href="resources/fontawesome-all.min.css">
+  <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+  <link rel="stylesheet" href="./resources/qgis2web.css">
+  <style>
+    .ol-geocoder.gcd-gl-container {
+      top: 100px !important;
+      left: 8px !important;
+    }
+
+    .ol-touch .ol-geocoder.gcd-gl-container {
+      top: 130px !important;
+    }
+
+    .ol-geocoder .gcd-gl-btn:after {
+      display: none;
+    }
+  </style>
+  <style>
+    .search-layer {
+      top: 135px;
+      left: .5em;
+    }
+
+    .ol-touch .search-layer {
+      top: 180px;
+    }
+  </style>
+  <style>
+    html,
+    body {
+      background-color: #ffffff;
+    }
+
+    .ol-control button {
+      background-color: #f8f8f8 !important;
+      color: #000000 !important;
+      border-radius: 0px !important;
+    }
+
+    .ol-zoom,
+    .geolocate,
+    .gcd-gl-control .ol-control {
+      background-color: rgba(255, 255, 255, .4) !important;
+      padding: 3px !important;
+    }
+
+    .ol-scale-line {
+      background: none !important;
+    }
+
+    .ol-scale-line-inner {
+      border: 2px solid #f8f8f8 !important;
+      border-top: none !important;
+      background: rgba(255, 255, 255, 0.5) !important;
+      color: black !important;
+    }
+  </style>
+  <link href="resources/ol-geocoder.min.css" rel="stylesheet">
+  <style>
+    .tooltip {
+      position: relative;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 4px;
+      color: white;
+      padding: 4px 8px;
+      opacity: 0.7;
+      white-space: nowrap;
+    }
+
+    .tooltip-measure {
+      opacity: 1;
+      font-weight: bold;
+    }
+
+    .tooltip-static {
+      background-color: #ffcc33;
+      color: black;
+      border: 1px solid white;
+    }
+
+    .tooltip-measure:before,
+    .tooltip-static:before {
+      border-top: 6px solid rgba(0, 0, 0, 0.5);
+      border-right: 6px solid transparent;
+      border-left: 6px solid transparent;
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      margin-left: -7px;
+      left: 50%;
+    }
+
+    .tooltip-static:before {
+      border-top-color: #ffcc33;
+    }
+
+    .measure-control {
+      top: 65px;
+      left: .5em;
+      display: flex;
+    }
+
+    .ol-touch .measure-control {
+      top: 80px;
+    }
+
+    .measure-control label {
+      padding: 1px;
+      padding-right: 4px;
+    }
+  </style>
+  <style>
+    html,
+    body,
+    #map {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+  <title></title>
+</head>
+
+<body>
+  <!-- Navigation-->
+  <nav class="navbar navbar-light bg-light static-top">
+    <div class="container">
+      <a class="navbar-brand" href="#!">Start Bootstrap</a>
+      <a class="btn btn-primary" href="#signup">Sign Up</a>
+    </div>
+  </nav>
+  <!-- Masthead-->
+  <header class="masthead">
+    <div class="container position-relative">
+      <div class="row justify-content-center">
+        <div class="col-xl-6">
+          <div class="text-center text-white">
+            <!-- Page heading-->
+            <h1 class="mb-5">Explore Beauty
+              Of Nusa Tenggara Timur & Lombok
+            </h1>
+            <!-- Signup form-->
+            <!-- * * * * * * * * * * * * * * *-->
+            <!-- * * SB Forms Contact Form * *-->
+            <!-- * * * * * * * * * * * * * * *-->
+            <!-- This form is pre-integrated with SB Forms.-->
+            <!-- To make this form functional, sign up at-->
+            <!-- https://startbootstrap.com/solution/contact-forms-->
+            <!-- to get an API token!-->
+            <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
+              <!-- Email address input-->
+              <div class="row">
+                <div class="col">
+                  <input class="form-control form-control-lg" id="emailAddress" type="email" placeholder="Email Address"
+                    data-sb-validations="required,email" />
+                  <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is
+                    required.</div>
+                  <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address Email is
+                    not valid.</div>
+                </div>
+                <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton"
+                    type="submit">Submit</button></div>
+              </div>
+              <!-- Submit success message-->
+              <!---->
+              <!-- This is what your users will see when the form-->
+              <!-- has successfully submitted-->
+              <div class="d-none" id="submitSuccessMessage">
+                <div class="text-center mb-3">
+                  <div class="fw-bolder">Form submission successful!</div>
+                  <p>To activate this form, sign up at</p>
+                  <a class="text-white"
+                    href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                </div>
+              </div>
+              <!-- Submit error message-->
+              <!---->
+              <!-- This is what your users will see when there is-->
+              <!-- an error submitting the form-->
+              <div class="d-none" id="submitErrorMessage">
+                <div class="text-center text-danger mb-3">Error sending message!</div>
+              </div>
+            </form>
+          </div>
         </div>
-        <script src="js/qgis2web_expressions.js"></script>
-        <script src="js/leaflet.js"></script>
-        <script src="js/L.Control.Layers.Tree.min.js"></script>
-        <script src="js/leaflet.rotatedMarker.js"></script>
-        <script src="js/leaflet.pattern.js"></script>
-        <script src="js/leaflet-hash.js"></script>
-        <script src="js/Autolinker.min.js"></script>
-        <script src="js/rbush.min.js"></script>
-        <script src="js/labelgun.min.js"></script>
-        <script src="js/labels.js"></script>
-        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
-        <script src="js/leaflet-measure.js"></script>
-        <script src="js/leaflet-search.js"></script>
-        <script src="js/tailDT.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/wNumb.js"></script>
-        <script src="data/point_1.js"></script>
-        <script>
-        var highlightLayer;
-        function highlightFeature(e) {
-            highlightLayer = e.target;
+      </div>
+    </div>
+  </header>
+  <!-- Icons Grid-->
+  <section class="features-icons bg-light text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+            <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary"></i></div>
+            <h3>Fully Responsive</h3>
+            <p class="lead mb-0">This theme will look great on any device, no matter the size!</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+            <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary"></i></div>
+            <h3>Bootstrap 5 Ready</h3>
+            <p class="lead mb-0">Featuring the latest build of the new Bootstrap 5 framework!</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+            <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div>
+            <h3>Easy to Use</h3>
+            <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Image Showcases-->
+  <section class="showcase">
+    <div class="container-fluid p-0">
+      <div class="row g-0">
+        <div class="col-lg-6 order-lg-2 text-white showcase-img"
+          style="background-image: url('./dist/assets/img/Pantai-Pink-2-1080x570.jpg')"></div>
+        <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+          <h2>Pantai Tangsi</h2>
+          <p class="lead mb-0">Pantai Tangsi, yang juga dikenal sebagai Pantai Pink, adalah salah satu destinasi wisata
+            tersembunyi di Lombok, Indonesia, yang menawarkan keindahan alam yang menakjubkan dan unik. Pantai ini
+            diberi nama "Pink" karena pasirnya yang berwarna merah muda, hasil dari campuran pasir putih dengan serpihan
+            karang merah yang halus.</p>
+        </div>
+      </div>
+      <div class="row g-0">
+        <div class="col-lg-6 text-white showcase-img"
+          style="background-image: url('./dist/assets/img/mtsjrdl-9y5uMwQKJzc-unsplash.jpg')">
+        </div>
+        <div class="col-lg-6 my-auto showcase-text">
+          <h2>Gili Trawangan</h2>
+          <p class="lead mb-0">Gili Trawangan, sering disingkat Gili T, adalah pulau terbesar dan paling populer di
+            antara tiga Gili Islands yang terletak di lepas pantai barat laut Lombok, Indonesia. Dikenal sebagai surga
+            bagi para wisatawan, Gili Trawangan menawarkan kombinasi sempurna antara keindahan alam, kehidupan bawah
+            laut yang memukau, serta atmosfer pesta yang energik. Pulau ini terkenal dengan pasir putihnya yang bersih,
+            air laut yang jernih, dan terumbu karang yang menjadi rumah bagi beragam biota laut, menjadikannya tempat
+            yang ideal untuk snorkeling dan menyelam. </p>
+        </div>
+      </div>
+      <div class="row g-0">
+        <div class="col-lg-6 order-lg-2 text-white showcase-img"
+          style="background-image: url('./dist/assets/img/genggelang-lombok-utara-instagram-1.jpg')"></div>
+        <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+          <h2>Bukit Selong</h2>
+          <p class="lead mb-0">Bukit Selong, yang terletak di Desa Sembalun, Lombok Timur, adalah destinasi wisata yang
+            menawarkan pemandangan alam yang luar biasa indah dan menenangkan. Dari puncak bukit ini, pengunjung
+            disuguhkan panorama yang memukau berupa hamparan sawah berpetak-petak dengan latar belakang pegunungan yang
+            megah, termasuk Gunung Rinjani yang menjulang tinggi. Waktu terbaik untuk mengunjungi Bukit Selong adalah
+            saat matahari terbit, di mana sinar matahari yang lembut perlahan menyinari ladang dan pegunungan,
+            menciptakan pemandangan yang sangat menakjubkan dan menyejukkan hati. </p>
+        </div>
+      </div>
+      <div class="row g-0">
+        <div class="col-lg-6 text-white showcase-img"
+          style="background-image: url('./dist/assets/img/wp10659806-mandalika-wallpapers.jpg')">
+        </div>
+        <div class="col-lg-6 my-auto showcase-text">
+          <h2>Sirkuit Mandalika</h2>
+          <p class="lead mb-0">Sirkuit Mandalika, yang secara resmi dikenal sebagai Pertamina Mandalika International
+            Street Circuit, adalah salah satu sirkuit balap internasional terbaru di Indonesia yang terletak di Kawasan
+            Ekonomi Khusus Mandalika, Lombok. Sirkuit ini menjadi sorotan dunia sejak menjadi tuan rumah bagi ajang
+            MotoGP dan World Superbike, menarik perhatian pecinta balap dari seluruh penjuru dunia. Dengan panjang
+            lintasan sekitar 4,3 kilometer dan 17 tikungan yang menantang, sirkuit ini dirancang dengan standar
+            internasional, menawarkan pengalaman balap yang spektakuler baik bagi pembalap maupun penonton.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Promotion -->
+  <section class="promotions ">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5 mt-promotion">
+          <img class="img-fluid mb-3" src="./dist/assets/img/modelSatu.png" />
+        </div>
+        <div class="col-lg-7 mt-promotion4">
+          <div>
+            <h2 style="letter-spacing: 1px;" class="font-monospace">Dapatkan Semua <br>
+              Kebutuhan Anda
+            </h2>
+            <p class="fs-2">
+              Kami menawarkan semua kebutuhan anda selama tour, <br />
+              sehingga anda hanya perlu menikmati liburan anda <br />
+              keluarga dengan nyaman tanpa perlu repot.
+            </p>
+          </div>
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="promotion-grid">
+                <img src="./dist/assets/img/hotel-ic.png" />
+                <span class="fw-normal fs-2 font-monospace lig">Hotel</span>
+              </div>
+              <div class="promotion-grid">
+                <img src="./dist/assets/img/foo-ic.png" />
+                <span class="fw-normal fs-2 font-monospace">Makanan</span>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="promotion-grid">
+                <img src="./dist/assets/img/tikcet-ic.png" />
+                <span class="fw-normal fs-2 font-monospace">Tiket Pesawat</span>
+              </div>
+              <div class="promotion-grid">
+                <img src="./dist/assets/img/transportasi-ic.png" />
+                <span class="fw-normal fs-2 font-monospace">Transportasi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Testimonials-->
+  <section class="testimonials text-center bg-light">
+    <div class="container">
+      <h2 class="mb-5">What people are saying...</h2>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+            <img class="img-fluid rounded-circle mb-3" src="./dist/assets/img/testimonials-1.jpg" alt="..." />
+            <h5>Margaret E.</h5>
+            <p class="font-weight-light mb-0">"This is fantastic! Thanks so much guys!"</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+            <img class="img-fluid rounded-circle mb-3" src="./dist/assets/img/testimonials-2.jpg" alt="..." />
+            <h5>Fred S.</h5>
+            <p class="font-weight-light mb-0">"Bootstrap is amazing. I've been using it to create lots of super nice
+              landing pages."</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+            <img class="img-fluid rounded-circle mb-3" src="./dist/assets/img/testimonials-3.jpg" alt="..." />
+            <h5>Sarah W.</h5>
+            <p class="font-weight-light mb-0">"Thanks so much for making these free resources available to us!"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container m-auto" id="map">
+    <div id="popup" class="ol-popup">
+      <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+      <div id="popup-content"></div>
+    </div>
+  </div>
+  <!-- Call to Action-->
+  <section class="call-to-action text-white text-center" id="signup">
+    <div class="container position-relative">
+      <div class="row justify-content-center">
+        <div class="col-xl-6">
+          <h2 class="mb-4">Ready to get started? Sign up now!</h2>
+          <!-- Signup form-->
+          <!-- * * * * * * * * * * * * * * *-->
+          <!-- * * SB Forms Contact Form * *-->
+          <!-- * * * * * * * * * * * * * * *-->
+          <!-- This form is pre-integrated with SB Forms.-->
+          <!-- To make this form functional, sign up at-->
+          <!-- https://startbootstrap.com/solution/contact-forms-->
+          <!-- to get an API token!-->
+          <form class="form-subscribe" id="contactFormFooter" data-sb-form-api-token="API_TOKEN">
+            <!-- Email address input-->
+            <div class="row">
+              <div class="col">
+                <input class="form-control form-control-lg" id="emailAddressBelow" type="email"
+                  placeholder="Email Address" data-sb-validations="required,email" />
+                <div class="invalid-feedback text-white" data-sb-feedback="emailAddressBelow:required">Email Address is
+                  required.</div>
+                <div class="invalid-feedback text-white" data-sb-feedback="emailAddressBelow:email">Email Address Email
+                  is not valid.</div>
+              </div>
+              <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton"
+                  type="submit">Submit</button></div>
+            </div>
+            <!-- Submit success message-->
+            <!---->
+            <!-- This is what your users will see when the form-->
+            <!-- has successfully submitted-->
+            <div class="d-none" id="submitSuccessMessage">
+              <div class="text-center mb-3">
+                <div class="fw-bolder">Form submission successful!</div>
+                <p>To activate this form, sign up at</p>
+                <a class="text-white"
+                  href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+              </div>
+            </div>
+            <!-- Submit error message-->
+            <!---->
+            <!-- This is what your users will see when there is-->
+            <!-- an error submitting the form-->
+            <div class="d-none" id="submitErrorMessage">
+              <div class="text-center text-danger mb-3">Error sending message!</div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Footer-->
+  <footer class="footer bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
+          <ul class="list-inline mb-2">
+            <li class="list-inline-item"><a href="#!">About</a></li>
+            <li class="list-inline-item">⋅</li>
+            <li class="list-inline-item"><a href="#!">Contact</a></li>
+            <li class="list-inline-item">⋅</li>
+            <li class="list-inline-item"><a href="#!">Terms of Use</a></li>
+            <li class="list-inline-item">⋅</li>
+            <li class="list-inline-item"><a href="#!">Privacy Policy</a></li>
+          </ul>
+          <p class="text-muted small mb-4 mb-lg-0">&copy; Your Website 2023. All Rights Reserved.</p>
+        </div>
+        <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
+          <ul class="list-inline mb-0">
+            <li class="list-inline-item me-4">
+              <a href="#!"><i class="bi-facebook fs-3"></i></a>
+            </li>
+            <li class="list-inline-item me-4">
+              <a href="#!"><i class="bi-twitter fs-3"></i></a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#!"><i class="bi-instagram fs-3"></i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-            if (e.target.feature.geometry.type === 'LineString' || e.target.feature.geometry.type === 'MultiLineString') {
-              highlightLayer.setStyle({
-                color: '#ffff00',
-              });
-            } else {
-              highlightLayer.setStyle({
-                fillColor: '#ffff00',
-                fillOpacity: 1
-              });
-            }
-        }
-        var map = L.map('map', {
-            zoomControl:true, maxZoom:15, minZoom:1
-        }).fitBounds([[-8.397505591909217,116.00852047176637],[-8.315742373995032,116.11563546876411]]);
-        var hash = new L.Hash(map);
-        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
-        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
-        function removeEmptyRowsFromPopupContent(content, feature) {
-         var tempDiv = document.createElement('div');
-         tempDiv.innerHTML = content;
-         var rows = tempDiv.querySelectorAll('tr');
-         for (var i = 0; i < rows.length; i++) {
-             var td = rows[i].querySelector('td.visible-with-data');
-             var key = td ? td.id : '';
-             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
-                 rows[i].parentNode.removeChild(rows[i]);
-             }
-         }
-         return tempDiv.innerHTML;
-        }
-        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
-          var tagName = event.target.tagName,
-            popup = map._popup;
-          // Also check if flag is already set.
-          if (tagName === "IMG" && popup && !popup._updated) {
-            popup._updated = true; // Set flag to prevent looping.
-            popup.update();
-          }
-        }, true);
-        var measureControl = new L.Control.Measure({
-            position: 'topleft',
-            primaryLengthUnit: 'meters',
-            secondaryLengthUnit: 'kilometers',
-            primaryAreaUnit: 'sqmeters',
-            secondaryAreaUnit: 'hectares'
-        });
-        measureControl.addTo(map);
-        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
-        .innerHTML = '';
-        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
-        .className += ' fas fa-ruler';
-        var bounds_group = new L.featureGroup([]);
-        function setBounds() {
-        }
-        map.createPane('pane_OSMStandard_0');
-        map.getPane('pane_OSMStandard_0').style.zIndex = 400;
-        var layer_OSMStandard_0 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            pane: 'pane_OSMStandard_0',
-            opacity: 1.0,
-            attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
-            minZoom: 1,
-            maxZoom: 15,
-            minNativeZoom: 0,
-            maxNativeZoom: 19
-        });
-        layer_OSMStandard_0;
-        map.addLayer(layer_OSMStandard_0);
-        function pop_point_1(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    for (var i in e.target._eventParents) {
-                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
-                            e.target._eventParents[i].resetStyle(e.target);
-                        }
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['nama'] !== null ? autolinker.link(feature.properties['nama'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-            var popup = layer.getPopup();
-            var content = popup.getContent();
-            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
-            popup.setContent(updatedContent);
-        }
+  <script src="resources/qgis2web_expressions.js"></script>
+  <script src="resources/polyfills.js"></script>
+  <script src="./resources/functions.js"></script>
+  <script src="./resources/ol.js"></script>
+  <script src="./resources/ol-layerswitcher.js"></script>
+  <script src="resources/ol-geocoder.js"></script>
+  <script src="layers/point_1.js"></script>
+  <script src="styles/point_1_style.js"></script>
+  <script src="./layers/layers.js" type="text/javascript"></script>
+  <script src="./resources/Autolinker.min.js"></script>
+  <script src="./resources/qgis2web.js"></script>
+  <!-- Bootstrap core JS-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Core theme JS-->
+  <script src="./dist/js/scripts.js"></script>
+  <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+  <!-- * *                               SB Forms JS                               * *-->
+  <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+  <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+  <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+</body>
 
-        function style_point_1_0() {
-            return {
-                pane: 'pane_point_1',
-                radius: 8.0,
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(203,10,14,1.0)',
-                interactive: true,
-            }
-        }
-        map.createPane('pane_point_1');
-        map.getPane('pane_point_1').style.zIndex = 401;
-        map.getPane('pane_point_1').style['mix-blend-mode'] = 'normal';
-        var layer_point_1 = new L.geoJson(json_point_1, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_point_1',
-            layerName: 'layer_point_1',
-            pane: 'pane_point_1',
-            onEachFeature: pop_point_1,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.circleMarker(latlng, style_point_1_0(feature));
-            },
-        });
-        bounds_group.addLayer(layer_point_1);
-        map.addLayer(layer_point_1);
-        var osmGeocoder = new L.Control.Geocoder({
-            collapsed: true,
-            position: 'topleft',
-            text: 'Search',
-            title: 'Testing'
-        }).addTo(map);
-        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
-        .className += ' fa fa-search';
-        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
-        .title += 'Search for a place';
-        var baseMaps = {};
-        var overlaysTree = [
-            {label: '<img src="legend/point_1.png" /> point', layer: layer_point_1},
-            {label: "OSM Standard", layer: layer_OSMStandard_0},]
-        var lay = L.control.layers.tree(null, overlaysTree,{
-            //namedToggle: true,
-            //selectorBack: false,
-            //closedSymbol: '&#8862; &#x1f5c0;',
-            //openedSymbol: '&#8863; &#x1f5c1;',
-            //collapseAll: 'Collapse all',
-            //expandAll: 'Expand all',
-            collapsed: false, 
-        });
-        lay.addTo(map);
-        setBounds();
-        var i = 0;
-        layer_point_1.eachLayer(function(layer) {
-            var context = {
-                feature: layer.feature,
-                variables: {}
-            };
-            layer.bindTooltip((layer.feature.properties['nama'] !== null?String('<div style="color: #323232; font-size: 13pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['nama']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_point_1'});
-            labels.push(layer);
-            totalMarkers += 1;
-              layer.added = true;
-              addLabel(layer, i);
-              i++;
-        });
-        map.addControl(new L.Control.Search({
-            layer: layer_point_1,
-            initial: false,
-            hideMarkerOnCollapse: true,
-            propertyName: 'nama'}));
-        document.getElementsByClassName('search-button')[0].className +=
-         ' fa fa-binoculars';
-        var mapDiv = document.getElementById('map');
-        var row = document.createElement('div');
-        row.className="row";
-        row.id="all";
-        row.style.height = "100%";
-        var col1 = document.createElement('div');
-        col1.className="col9";
-        col1.id = "mapWindow";
-        col1.style.height = "99%";
-        col1.style.width = "80%";
-        col1.style.display = "inline-block";
-        var col2 = document.createElement('div');
-        col2.className="col3";
-        col2.id = "menu";
-        col2.style.display = "inline-block";
-        mapDiv.parentNode.insertBefore(row, mapDiv);
-        document.getElementById("all").appendChild(col1);
-        document.getElementById("all").appendChild(col2);
-        col1.appendChild(mapDiv)
-        var Filters = {"id": "int","nama": "str"};
-        function filterFunc() {
-          map.eachLayer(function(lyr){
-          if ("options" in lyr && "dataVar" in lyr["options"]){
-            features = this[lyr["options"]["dataVar"]].features.slice(0);
-            try{
-              for (key in Filters){
-                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
-                if (Filters[key] == "str" || Filters[key] == "bool"){
-                  var selection = [];
-                  var options = document.getElementById("sel_" + keyS).options
-                  for (var i=0; i < options.length; i++) {
-                    if (options[i].selected) selection.push(options[i].value);
-                  }
-                    try{
-                      if (key in features[0].properties){
-                        for (i = features.length - 1;
-                          i >= 0; --i){
-                          if (selection.indexOf(
-                          features[i].properties[key])<0
-                          && selection.length>0) {
-                          features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                  }
-                }
-                if (Filters[key] == "int"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (parseInt(features[i].properties[key])
-                          < sliderVals[0]
-                          || parseInt(features[i].properties[key])
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "real"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (features[i].properties[key]
-                          < sliderVals[0]
-                          || features[i].properties[key]
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "date"
-                  || Filters[key] == "datetime"
-                  || Filters[key] == "time"){
-                  try{
-                    if (key in features[0].properties){
-                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
-                      startdate = document.getElementById("dat_" +
-                        HTMLkey + "_date1").value.replace(" ", "T");
-                      enddate = document.getElementById("dat_" +
-                        HTMLkey + "_date2").value.replace(" ", "T");
-                      for (i = features.length - 1; i >= 0; --i){
-                        if (features[i].properties[key] < startdate
-                          || features[i].properties[key] > enddate){
-                          features.splice(i,1);
-                        }
-                      }
-                    }
-                  } catch(err){
-                  }
-                }
-              }
-            } catch(err){
-            }
-          this[lyr["options"]["layerName"]].clearLayers();
-          this[lyr["options"]["layerName"]].addData(features);
-        var i = 0;
-        layer_point_1.eachLayer(function(layer) {
-            var context = {
-                feature: layer.feature,
-                variables: {}
-            };
-            layer.bindTooltip((layer.feature.properties['nama'] !== null?String('<div style="color: #323232; font-size: 13pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['nama']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_point_1'});
-            labels.push(layer);
-            totalMarkers += 1;
-              layer.added = true;
-              addLabel(layer, i);
-              i++;
-        });
-          }
-          })
-        }
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_id = document.createElement("div");
-            div_id.id = "div_id";
-            div_id.className = "slider";
-            document.getElementById("menu").appendChild(div_id);
-            var lab_id = document.createElement('div');
-            lab_id.innerHTML  = 'id: <span id="val_id"></span>';
-            lab_id.className = 'filterlabel';
-            document.getElementById("menu").appendChild(lab_id);
-            var reset_id = document.createElement('div');
-            reset_id.innerHTML = 'clear filter';
-            reset_id.className = 'filterlabel';
-            lab_id.className = 'filterlabel';
-            reset_id.onclick = function() {
-                sel_id.noUiSlider.reset();
-            };
-            document.getElementById("menu").appendChild(reset_id);
-            var sel_id = document.getElementById('div_id');
-            noUiSlider.create(sel_id, {
-                connect: true,
-                start: [1, 9],
-                step: 1,
-                format: wNumb({
-                    decimals: 0,
-                    }),
-                range: {
-                min: 1,
-                max: 9
-                }
-            });
-            sel_id.noUiSlider.on('update', function (values) {
-            filterVals =[];
-            for (value in values){
-            filterVals.push(parseInt(value))
-            }
-            val_id = document.getElementById('val_id');
-            val_id.innerHTML = values.join(' - ');
-                filterFunc()
-            });
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_nama = document.createElement('div');
-            div_nama.id = "div_nama";
-            div_nama.className= "filterselect";
-            document.getElementById("menu").appendChild(div_nama);
-            sel_nama = document.createElement('select');
-            sel_nama.multiple = true;
-            sel_nama.size = 9;
-            sel_nama.id = "sel_nama";
-            var nama_options_str = "<option value='' unselected></option>";
-            sel_nama.onchange = function(){filterFunc()};
-            nama_options_str  += '<option value="Aik nyet sesoat">Aik nyet sesoat</option>';
-            nama_options_str  += '<option value="Bukit Selong">Bukit Selong</option>';
-            nama_options_str  += '<option value="Bukit nagasari">Bukit nagasari</option>';
-            nama_options_str  += '<option value="Gili Trawangan">Gili Trawangan</option>';
-            nama_options_str  += '<option value="Pantai Tangsi">Pantai Tangsi</option>';
-            nama_options_str  += '<option value="Pantai seger kuta">Pantai seger kuta</option>';
-            nama_options_str  += '<option value="Pantai tanjung Aan">Pantai tanjung Aan</option>';
-            nama_options_str  += '<option value="Rumah pohon gangga">Rumah pohon gangga</option>';
-            nama_options_str  += '<option value="Sirkuit mandalika">Sirkuit mandalika</option>';
-            sel_nama.innerHTML = nama_options_str;
-            div_nama.appendChild(sel_nama);
-            var lab_nama = document.createElement('div');
-            lab_nama.innerHTML = 'nama';
-            lab_nama.className = 'filterlabel';
-            div_nama.appendChild(lab_nama);
-            var reset_nama = document.createElement('div');
-            reset_nama.innerHTML = 'clear filter';
-            reset_nama.className = 'filterlabel';
-            reset_nama.onclick = function() {
-                var options = document.getElementById("sel_nama").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_nama.appendChild(reset_nama);
-        resetLabels([layer_point_1]);
-        map.on("zoomend", function(){
-            resetLabels([layer_point_1]);
-        });
-        map.on("layeradd", function(){
-            resetLabels([layer_point_1]);
-        });
-        map.on("layerremove", function(){
-            resetLabels([layer_point_1]);
-        });
-        </script>
-    </body>
 </html>
