@@ -10840,6 +10840,7 @@ textarea.form-control-lg {
   font-size: 4.5rem;
 }
 
+
 .mt-promotion {
   margin-top: 3rem;
 }
@@ -10855,6 +10856,22 @@ textarea.form-control-lg {
   margin-right: 10px;
 }
 
+.waves-map {
+  position: relative;
+  background-color: #343a40;
+  background: url("../assets/img/waves-map.png") no-repeat center center;
+ 
+}
+.waves-map:before {
+  content: "";
+  position: absolute;
+  background-color: #1c375e;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+}
 
 header.masthead {
   position: relative;
